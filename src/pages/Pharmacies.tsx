@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, MapPin, Phone, ArrowLeft, Clock } from "lucide-react";
+import LoadingCard from "@/components/LoadingCard";
 
 interface Pharmacy {
   id: string;
@@ -84,15 +85,7 @@ const Pharmacies = () => {
         {loading ? (
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
-              <Card key={i} className="animate-pulse border-0 shadow-md">
-                <CardContent className="p-5">
-                  <div className="space-y-3">
-                    <div className="h-6 bg-muted rounded-lg w-3/4"></div>
-                    <div className="h-4 bg-muted rounded w-1/2"></div>
-                    <div className="h-10 bg-muted rounded-xl"></div>
-                  </div>
-                </CardContent>
-              </Card>
+              <LoadingCard key={i} />
             ))}
           </div>
         ) : (

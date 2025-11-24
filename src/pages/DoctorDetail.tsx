@@ -77,11 +77,20 @@ const DoctorDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 flex items-center justify-center">
-        <div className="animate-pulse text-center">
-          <div className="w-32 h-32 rounded-full bg-muted mx-auto mb-4"></div>
-          <div className="h-8 bg-muted rounded w-64 mx-auto mb-2"></div>
-          <div className="h-6 bg-muted rounded w-48 mx-auto"></div>
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 flex items-center justify-center relative overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-float"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+        </div>
+        <div className="relative z-10 text-center">
+          <div className="relative mx-auto mb-6">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full blur-2xl opacity-30 animate-pulse-slow"></div>
+            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-muted/80 to-muted/40 animate-pulse relative z-10"></div>
+          </div>
+          <div className="space-y-3">
+            <div className="h-8 bg-gradient-to-r from-muted/80 to-muted/40 rounded-xl w-64 mx-auto animate-pulse"></div>
+            <div className="h-6 bg-gradient-to-r from-muted/60 to-muted/30 rounded-lg w-48 mx-auto animate-pulse" style={{ animationDelay: '100ms' }}></div>
+          </div>
         </div>
       </div>
     );

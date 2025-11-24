@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Search, Activity, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import LoadingCard from "@/components/LoadingCard";
 
 interface Disease {
   id: string;
@@ -80,15 +81,7 @@ const Diseases = () => {
         {loading ? (
           <div className="space-y-4">
             {[...Array(6)].map((_, i) => (
-              <Card key={i} className="animate-pulse border-0 shadow-md">
-                <CardContent className="p-5">
-                  <div className="space-y-3">
-                    <div className="h-6 bg-muted rounded-lg w-3/4"></div>
-                    <div className="h-4 bg-muted rounded w-full"></div>
-                    <div className="h-6 bg-muted rounded-full w-1/3"></div>
-                  </div>
-                </CardContent>
-              </Card>
+              <LoadingCard key={i} />
             ))}
           </div>
         ) : (
