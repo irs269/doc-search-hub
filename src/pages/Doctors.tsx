@@ -71,41 +71,46 @@ const Doctors = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-      <div className="container mx-auto px-4 py-6 max-w-4xl">
-        <div className="flex items-center gap-4 mb-6">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate(-1)}
-            className="rounded-full"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="text-2xl font-bold text-foreground">Médecins</h1>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 pb-6">
+      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border/50 shadow-sm">
+        <div className="container mx-auto px-4 py-4 max-w-md sm:max-w-2xl">
+          <div className="flex items-center gap-3 mb-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate(-1)}
+              className="rounded-full hover:bg-primary/10"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <h1 className="text-2xl font-bold text-foreground">Médecins</h1>
+          </div>
 
-        <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder="Rechercher un médecin..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 h-12 rounded-full border-2"
-          />
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Rechercher un médecin..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-12 h-12 rounded-2xl border-2 bg-background shadow-sm focus:shadow-md transition-shadow"
+            />
+          </div>
         </div>
+      </div>
 
+      <div className="container mx-auto px-4 mt-4 max-w-md sm:max-w-2xl">
         {loading ? (
-          <div className="grid grid-cols-1 gap-4">
+          <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
-              <Card key={i} className="animate-pulse">
-                <CardContent className="p-6">
+              <Card key={i} className="animate-pulse border-0 shadow-md">
+                <CardContent className="p-5">
                   <div className="flex gap-4">
-                    <div className="w-16 h-16 rounded-full bg-muted"></div>
-                    <div className="flex-1">
-                      <div className="h-6 bg-muted rounded w-3/4 mb-2"></div>
+                    <div className="w-20 h-20 rounded-2xl bg-muted"></div>
+                    <div className="flex-1 space-y-3">
+                      <div className="h-6 bg-muted rounded-lg w-3/4"></div>
                       <div className="h-4 bg-muted rounded w-1/2"></div>
+                      <div className="h-4 bg-muted rounded w-2/3"></div>
                     </div>
                   </div>
                 </CardContent>
@@ -113,53 +118,69 @@ const Doctors = () => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 animate-fade-in">
-            {filteredDoctors.map((doctor) => (
+          <div className="space-y-4 animate-fade-in">
+            {filteredDoctors.map((doctor, index) => (
               <Card
                 key={doctor.id}
-                className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-2 hover:border-primary"
+                className="cursor-pointer active:scale-[0.98] transition-all duration-300 border-0 group overflow-hidden animate-slide-up"
+                style={{ 
+                  animationDelay: `${index * 50}ms`,
+                  boxShadow: 'var(--shadow-card)'
+                }}
                 onClick={() => navigate(`/doctor/${doctor.id}`)}
               >
-                <CardContent className="p-6">
+                <CardContent className="p-5">
                   <div className="flex gap-4">
-                    <Avatar className="w-16 h-16 border-2 border-primary">
+                    <Avatar className="w-20 h-20 border-4 border-primary/10 ring-2 ring-primary/20 shadow-lg">
                       <AvatarImage src={doctor.photo || undefined} />
-                      <AvatarFallback className="bg-gradient-to-br from-primary to-primary-light text-primary-foreground font-semibold">
+                      <AvatarFallback className="bg-gradient-to-br from-primary to-primary-light text-primary-foreground font-bold text-lg">
                         {getInitials(doctor.first_name, doctor.last_name)}
                       </AvatarFallback>
                     </Avatar>
 
-                    <div className="flex-1">
-                      <h3 className="font-bold text-lg text-foreground">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-lg text-foreground leading-tight mb-1 group-hover:text-primary transition-colors">
                         Dr. {doctor.first_name} {doctor.last_name}
                       </h3>
 
                       {doctor.specialties && (
-                        <div className="flex items-center gap-2 mt-1 mb-2">
-                          <span className="text-sm">
-                            {doctor.specialties.icon || "🏥"}
-                          </span>
-                          <span className="text-sm text-primary font-medium">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+                            <span className="text-sm">
+                              {doctor.specialties.icon || "🏥"}
+                            </span>
+                          </div>
+                          <span className="text-sm text-primary font-semibold">
                             {doctor.specialties.name}
                           </span>
                         </div>
                       )}
 
-                      <div className="flex items-start gap-2 text-sm text-muted-foreground mb-1">
-                        <Building2 className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                        <span>{doctor.hospital}</span>
-                      </div>
-
-                      {doctor.address && (
-                        <div className="flex items-start gap-2 text-sm text-muted-foreground mb-1">
-                          <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                          <span>{doctor.address}</span>
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Building2 className="h-4 w-4 flex-shrink-0 text-primary/60" />
+                          <span className="truncate">{doctor.hospital}</span>
                         </div>
-                      )}
 
-                      <div className="flex items-center gap-2 text-sm text-secondary font-medium">
-                        <Phone className="h-4 w-4" />
-                        <span>{doctor.phone_number}</span>
+                        {doctor.address && (
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <MapPin className="h-4 w-4 flex-shrink-0 text-secondary/60" />
+                            <span className="truncate">{doctor.address}</span>
+                          </div>
+                        )}
+
+                        <div className="flex items-center gap-2 text-sm font-medium text-secondary">
+                          <Phone className="h-4 w-4 flex-shrink-0" />
+                          <span>{doctor.phone_number}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex-shrink-0 self-center">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:shadow-lg transition-all">
+                        <svg className="w-5 h-5 text-primary group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                        </svg>
                       </div>
                     </div>
                   </div>
@@ -168,8 +189,12 @@ const Doctors = () => {
             ))}
 
             {filteredDoctors.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">Aucun médecin trouvé</p>
+              <div className="text-center py-16">
+                <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-muted/50 flex items-center justify-center">
+                  <Search className="h-12 w-12 text-muted-foreground" />
+                </div>
+                <p className="text-lg font-medium text-muted-foreground">Aucun médecin trouvé</p>
+                <p className="text-sm text-muted-foreground/70 mt-1">Essayez une autre recherche</p>
               </div>
             )}
           </div>

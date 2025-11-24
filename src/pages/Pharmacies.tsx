@@ -52,72 +52,91 @@ const Pharmacies = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-secondary/5 via-background to-primary/5">
-      <div className="container mx-auto px-4 py-6 max-w-4xl">
-        <div className="flex items-center gap-4 mb-6">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate("/")}
-            className="rounded-full"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <h1 className="text-2xl font-bold text-foreground">Pharmacies</h1>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-secondary/5 via-background to-primary/5 pb-6">
+      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-lg border-b border-border/50 shadow-sm">
+        <div className="container mx-auto px-4 py-4 max-w-md sm:max-w-2xl">
+          <div className="flex items-center gap-3 mb-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/")}
+              className="rounded-full hover:bg-secondary/10"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <h1 className="text-2xl font-bold text-foreground">Pharmacies</h1>
+          </div>
 
-        <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder="Rechercher une pharmacie..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 h-12 rounded-full border-2"
-          />
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Rechercher une pharmacie..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-12 h-12 rounded-2xl border-2 bg-background shadow-sm focus:shadow-md transition-shadow"
+            />
+          </div>
         </div>
+      </div>
 
+      <div className="container mx-auto px-4 mt-4 max-w-md sm:max-w-2xl">
         {loading ? (
-          <div className="grid grid-cols-1 gap-4">
+          <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
-              <Card key={i} className="animate-pulse">
-                <CardContent className="p-6">
-                  <div className="h-6 bg-muted rounded w-3/4 mb-2"></div>
-                  <div className="h-4 bg-muted rounded w-1/2"></div>
+              <Card key={i} className="animate-pulse border-0 shadow-md">
+                <CardContent className="p-5">
+                  <div className="space-y-3">
+                    <div className="h-6 bg-muted rounded-lg w-3/4"></div>
+                    <div className="h-4 bg-muted rounded w-1/2"></div>
+                    <div className="h-10 bg-muted rounded-xl"></div>
+                  </div>
                 </CardContent>
               </Card>
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 animate-fade-in">
-            {filteredPharmacies.map((pharmacy) => (
+          <div className="space-y-4 animate-fade-in">
+            {filteredPharmacies.map((pharmacy, index) => (
               <Card
                 key={pharmacy.id}
-                className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-2 hover:border-secondary"
+                className="transition-all duration-300 border-0 overflow-hidden animate-slide-up"
+                style={{ 
+                  animationDelay: `${index * 50}ms`,
+                  boxShadow: 'var(--shadow-card)'
+                }}
               >
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between gap-4 mb-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-bold text-lg text-foreground">
-                          {pharmacy.name}
-                        </h3>
-                        {pharmacy.is_24h && (
-                          <span className="px-2 py-1 bg-secondary text-secondary-foreground text-xs font-semibold rounded-full">
-                            24h/24
-                          </span>
-                        )}
+                <CardContent className="p-5">
+                  <div className="mb-4">
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div className="flex items-start gap-3 flex-1 min-w-0">
+                        <div className="w-12 h-12 flex-shrink-0 rounded-2xl bg-gradient-to-br from-secondary to-secondary-light flex items-center justify-center shadow-lg">
+                          <span className="text-2xl">💊</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-bold text-lg text-foreground leading-tight mb-1">
+                            {pharmacy.name}
+                          </h3>
+                          {pharmacy.is_24h && (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-gradient-to-r from-secondary to-secondary-light text-white text-xs font-bold rounded-full shadow-sm">
+                              <Clock className="h-3 w-3" />
+                              24h/24
+                            </span>
+                          )}
+                        </div>
                       </div>
+                    </div>
 
-                      <div className="flex items-start gap-2 text-sm text-muted-foreground mb-2">
-                        <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                        <span>{pharmacy.address}</span>
+                    <div className="space-y-2">
+                      <div className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                        <MapPin className="h-4 w-4 flex-shrink-0 mt-0.5 text-secondary/70" />
+                        <span className="leading-relaxed">{pharmacy.address}</span>
                       </div>
 
                       {pharmacy.opening_hours && (
-                        <div className="flex items-start gap-2 text-sm text-muted-foreground mb-2">
-                          <Clock className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                          <span>{pharmacy.opening_hours}</span>
+                        <div className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                          <Clock className="h-4 w-4 flex-shrink-0 mt-0.5 text-primary/70" />
+                          <span className="leading-relaxed">{pharmacy.opening_hours}</span>
                         </div>
                       )}
                     </div>
@@ -125,18 +144,23 @@ const Pharmacies = () => {
 
                   <Button
                     onClick={() => handleCall(pharmacy.phone_number)}
-                    className="w-full bg-gradient-to-r from-secondary to-secondary-light hover:opacity-90"
+                    className="w-full bg-gradient-to-r from-secondary to-secondary-light text-white shadow-md hover:shadow-lg active:scale-[0.98]"
+                    size="lg"
                   >
-                    <Phone className="mr-2 h-4 w-4" />
-                    {pharmacy.phone_number}
+                    <Phone className="mr-2 h-5 w-5" />
+                    <span className="font-semibold">{pharmacy.phone_number}</span>
                   </Button>
                 </CardContent>
               </Card>
             ))}
 
             {filteredPharmacies.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">Aucune pharmacie trouvée</p>
+              <div className="text-center py-16">
+                <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-muted/50 flex items-center justify-center">
+                  <Search className="h-12 w-12 text-muted-foreground" />
+                </div>
+                <p className="text-lg font-medium text-muted-foreground">Aucune pharmacie trouvée</p>
+                <p className="text-sm text-muted-foreground/70 mt-1">Essayez une autre recherche</p>
               </div>
             )}
           </div>
